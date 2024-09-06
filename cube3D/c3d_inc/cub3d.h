@@ -24,8 +24,18 @@
 
 typedef struct s_data
 {
-	char *s;
+	void    *ptr;
+	void    *win;
 }	t_data;
+
+typedef struct hero
+{
+	int		vu_height;
+	int		vu_width;
+	char 	*vu_xpm[16];
+	void 	*vu[16];
+}	t_hero;
+
 
 /*Notes pour Nathans :
 *	J'ai pas pense a d'autres structures donc a toi de voir si
@@ -38,6 +48,7 @@ typedef struct s_data
 		FUNCTIONS PROTOTYPES
 *//////////////////////////////////////////////////////////////////////////////
 
+void hero_fram_init(t_hero *hero, t_data *data);
 
 
 #endif

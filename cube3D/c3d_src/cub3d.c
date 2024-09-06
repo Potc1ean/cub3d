@@ -15,13 +15,12 @@
 int main(void)
 {
     t_data  data;
-    void    *mlx_ptr;
-    void    *win_ptr;
+    t_hero  hero;
 
-    data.s = "Kaca";
-    mlx_ptr = mlx_init();
-    win_ptr = mlx_new_window(mlx_ptr, 800, 600, "Cub3d des gros BOOOOWGOS");
-    mlx_string_put(mlx_ptr, win_ptr, 395, 295, 0xFFFFFFF, data.s);
-    mlx_loop(mlx_ptr);
+    data.ptr = mlx_init();
+    data.win = mlx_new_window(data.ptr, 800, 600, "Cub3d des gros BOOOOWGOS");
+    hero_fram_init(&hero, &data);
+    mlx_put_image_to_window(data.ptr, data.win, hero.vu[0], 384, 284);
+    mlx_loop(data.ptr);
     return (0);
 }

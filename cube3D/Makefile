@@ -20,9 +20,9 @@ LIBMLX = -Lmlx/
 #		ALL FILES
 #//////////////////////////////////////////////////////////////////////////////
 
-SRCS =	c3d_src/cub3d.c			\
+SRCS =	c3d_src/cub3d.c		c3d_src/hero.c	\
 
-HEAD =	c3d_inc/cub3d.h			c3d_inc/c3d_keys.h
+HEAD =	c3d_inc/cub3d.h		c3d_inc/c3d_keys.h
 
 #//////////////////////////////////////////////////////////////////////////////
 #		COMMAND SHORTCUTS
