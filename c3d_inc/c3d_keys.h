@@ -16,19 +16,17 @@
 // Keyboard
 // A S D W
 
-# define K_A 0
-# define K_S 1
-# define K_D 2
-# define K_W 13
+# define K_A 97
+# define K_S 115
+# define K_D 100
+# define K_W 119
 
 // Keyboard Special Characters
 
-# define K_ESC 53
-# define K_SP 49
-# define K_TAB 48
-# define K_UP 126
-# define K_LEFT 123
-# define K_DOWN 125
-# define K_RIGHT 124
+# define K_ESC  65307
+# define K_SP   32
+# define K_TAB  65289  
+# define K_LEFT 65361
+# define K_RIGHT 65363
 
 #endif

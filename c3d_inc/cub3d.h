@@ -22,20 +22,24 @@
 		STRUCTURES TYPEDEFS
 *//////////////////////////////////////////////////////////////////////////////
 
+typedef struct hero
+{
+	/*--Perm--*/
+	short dir;
+
+	/*--Tmp--*/
+	int		vu_height;
+	int		vu_width;
+	char 	*vu_xpm[24]; //j'ai eu la flemme de mettre trop de frams et oui le sang ici c'est la rue
+	void 	*vu[24];
+}	t_hero;
+
 typedef struct s_data
 {
 	void    *ptr;
 	void    *win;
+	t_hero	*hero;
 }	t_data;
-
-typedef struct hero
-{
-	int		vu_height;
-	int		vu_width;
-	char 	*vu_xpm[16];
-	void 	*vu[16];
-}	t_hero;
-
 
 /*Notes pour Nathans :
 *	J'ai pas pense a d'autres structures donc a toi de voir si
@@ -48,7 +52,9 @@ typedef struct hero
 		FUNCTIONS PROTOTYPES
 *//////////////////////////////////////////////////////////////////////////////
 
-void hero_fram_init(t_hero *hero, t_data *data);
+void 	hero_fram_init(t_data *data);
+void 	display_hero(t_data *data);
+void	c3d_loop(t_data *data);
 
 
 #endif

@@ -14,13 +14,15 @@
 
 int main(void)
 {
-    t_data  data;
-    t_hero  hero;
+    t_data  *data;
 
-    data.ptr = mlx_init();
-    data.win = mlx_new_window(data.ptr, 800, 600, "Cub3d des gros BOOOOWGOS");
-    hero_fram_init(&hero, &data);
-    mlx_put_image_to_window(data.ptr, data.win, hero.vu[0], 384, 284);
-    mlx_loop(data.ptr);
+    data = malloc(sizeof(t_data));
+    data->hero = malloc(sizeof(t_hero));
+    data->hero->dir = 0;
+    data->ptr = mlx_init();
+    data->win = mlx_new_window(data->ptr, 800, 600, "Cub3d des gros BOOOOWGOS");
+    hero_fram_init(data);
+    c3d_loop(data);
+    mlx_loop(data->ptr);
     return (0);
 }
