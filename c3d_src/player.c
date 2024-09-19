@@ -1,6 +1,6 @@
 #include "../c3d_inc/cub3d.h"
 
-void display_player(t_data *data)
+void c3d_display_player(t_data *data)
 {
     int i;
     

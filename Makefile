@@ -20,8 +20,8 @@ LIBMLX = -Lmlx/
 #		ALL FILES
 #//////////////////////////////////////////////////////////////////////////////
 
-SRCS =	c3d_src/cub3d.c		c3d_src/player.c	c3d_src/c3d_loop.c	\
-		c3d_src/c3d_utils.c
+SRCS =	c3d_src/cub3d.c		c3d_src/player.c		c3d_src/c3d_loop.c		\
+		c3d_src/c3d_utils.c c3d_src/c3d_init.c		c3d_src/keys_manager.c	\
 
 HEAD =	c3d_inc/cub3d.h		c3d_inc/c3d_keys.h
 

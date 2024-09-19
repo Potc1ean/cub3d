@@ -14,6 +14,7 @@
 # define __CUB3D__
 
 # include <stdio.h>
+# include <unistd.h>
 # include <math.h>
 # include "../mlx/mlx.h"
 # include "../libft/lib_includes/libft.h"
@@ -23,8 +24,8 @@
 		PLAYER GLOBALS
 *//////////////////////////////////////////////////////////////////////////////
 
-#define PLAYER_ROT_SPEED 10;
-#define PLAYER_MOV_SPEED 10;
+#define PLAYER_ROT_SPEED 1;
+#define PLAYER_MOV_SPEED 1;
 
 /*/////////////////////////////////////////////////////////////////////////////
 		STRUCTURES TYPEDEFS
@@ -44,10 +45,22 @@ typedef struct player
 	void 	*vu[24];
 }	t_player;
 
+typedef struct s_keys
+{
+	short a;
+	short s;
+	short d;
+	short w;
+	short l;
+	short r;
+}	t_keys;
+
 typedef struct s_data
 {
-	void    *mlx_ptr;
-	void    *win;
+	void    	*mlx_ptr;
+	void    	*win;
+	char		**map;
+	t_keys		*keys_s;
 	t_player	*player;
 }	t_data;
 
@@ -62,9 +75,14 @@ typedef struct s_data
 		FUNCTIONS PROTOTYPES
 *//////////////////////////////////////////////////////////////////////////////
 
+void 	c3d_display_player(t_data *data);
+void	c3d_keys_manager(t_data *data);
+int		c3d_loop(t_data *data);
+
+/*----init----*/
 void 	player_fram_init(t_data *data);
-void 	display_player(t_data *data);
-void	c3d_loop(t_data *data);
+int		c3d_data_init(t_data **data);
+void	c3d_keys_status_init(t_data *data);
 
 /*----utilis----*/
 float deg_to_rad(float i_degrees);
