@@ -20,7 +20,7 @@ int main(void)
         return (0);
     c3d_keys_status_init(data);
     ft_putnbr_fd(data->keys_s->a, 1);
-    player_fram_init(data); //fait avec le cul
+    player_fram_init(data); 
     c3d_keys_status_init(data);
     c3d_keys_manager(data);
     mlx_loop_hook(data->mlx_ptr, c3d_loop, data);
