@@ -1,54 +1,61 @@
 #include "../c3d_inc/cub3d.h"
 
+static void player_init(t_data *data)
+{
+    int x = 0;
+    int y = 0;
+
+    while (data->map[y])
+    {
+        while (data->map[y][x])
+        {
+            if (data->map[y][x] == 'P')
+            {
+                // data->map[y][x] = '0';
+                data->player->x = x;
+                data->player->y = y;
+                return;
+            }
+            x++;
+        }
+        x = 0;
+        y++;
+    }
+    data->player->dir = 0;
+}
+
 int c3d_data_init(t_data **data)
 {
     (*data) = malloc(sizeof(t_data));
     (*data)->player = malloc(sizeof(t_player));
     (*data)->keys_s = malloc(sizeof(t_keys));
-    (*data)->player->dir = 0;
-    (*data)->player->x = 400;
-    (*data)->player->y = 300;
     (*data)->mlx_ptr = mlx_init();
-    (*data)->win = mlx_new_window((*data)->mlx_ptr, 800, 576, "Cub3d des gros BOOOOWGOS");
-
-    (*data)->map = malloc(sizeof(char*)* 18);
-    (*data)->map[0] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[1] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[2] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[3] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[4] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[5] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[6] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[7] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[8] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[9] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[10] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[11] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[12] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[13] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[14] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[15] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[16] = malloc(sizeof(char)* 25 + 1);
-    (*data)->map[17] = malloc(sizeof(char)* 25 + 1);
-
-    (*data)->map[0] = "#########################\0";
-    (*data)->map[1] = "#.......................#\0";
-    (*data)->map[2] = "#.......................#\0";
-    (*data)->map[3] = "#......####.............#\0";
-    (*data)->map[4] = "#......#..#.............#\0";
-    (*data)->map[5] = "#......###..............#\0";
-    (*data)->map[6] = "#......#................#\0";
-    (*data)->map[7] = "#......#..####..........#\0";
-    (*data)->map[8] = "#.........#.............#\0";
-    (*data)->map[9] = "#.........##............#\0";
-    (*data)->map[10] = "#........#..............#\0";
-    (*data)->map[11] = "#........####...........#\0";
-    (*data)->map[12] = "#.......................#\0";
-    (*data)->map[13] = "#.......................#\0";
-    (*data)->map[14] = "#.......................#\0";
-    (*data)->map[15] = "#.......................#\0";
-    (*data)->map[16] = "#.......................#\0";
-    (*data)->map[17] = "#########################\0";
+    (*data)->win_height = 576;
+    (*data)->win_width = 800;
+    (*data)->size = 32;
+    (*data)->win = mlx_new_window((*data)->mlx_ptr, (*data)->win_width, (*data)->win_height, "Cub3d");
+    (*data)->screen_img = mlx_new_image((*data)->mlx_ptr, (*data)->win_width, (*data)->win_height);
+    (*data)->map = malloc(sizeof(char*)* 19);
+    (*data)->map[0] = "1111111111111111111111111\0";
+    (*data)->map[1] = "1000000000000000000000001\0";
+    (*data)->map[2] = "1000000000000000000000001\0";
+    (*data)->map[3] = "1000000111100000000000001\0";
+    (*data)->map[4] = "1000000100100000000000001\0";
+    (*data)->map[5] = "1000000111000000000000001\0";
+    (*data)->map[7] = "1000000100111100000000001\0";
+    (*data)->map[6] = "1000000100000000000000001\0";
+    (*data)->map[8] = "1000000000100000000000001\0";
+    (*data)->map[9] = "100000000011000000P000001\0";
+    (*data)->map[10] = "1000000001000000000000001\0";
+    (*data)->map[11] = "1000000001111000000000001\0";
+    (*data)->map[12] = "1000000000000000000000001\0";
+    (*data)->map[13] = "1000000000000000000000001\0";
+    (*data)->map[14] = "1000000000000000000000001\0";
+    (*data)->map[15] = "1000000000000000000000001\0";
+    (*data)->map[16] = "1000000000000000000000001\0";
+    (*data)->map[17] = "1111111111111111111111111\0";
+    (*data)->map[18] = NULL;
+    player_init(*data);
     return (0);
 }
 

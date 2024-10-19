@@ -16,16 +16,17 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <math.h>
+# include <stdbool.h>
 # include "../mlx/mlx.h"
 # include "../libft/lib_includes/libft.h"
 # include "c3d_keys.h"
 
 /*/////////////////////////////////////////////////////////////////////////////
-		PLAYER GLOBALS
+		MACROS
 *//////////////////////////////////////////////////////////////////////////////
 
-#define PLAYER_ROT_SPEED 1;
-#define PLAYER_MOV_SPEED 1;
+#define PLAYER_ROT_SPEED 0.1f;
+#define PLAYER_MOV_SPEED 0.01f;
 
 /*/////////////////////////////////////////////////////////////////////////////
 		STRUCTURES TYPEDEFS
@@ -34,42 +35,38 @@
 typedef struct player
 {
 	/*--Perm--*/
-	short dir;
+	float dir;
 	float x;
 	float y;
-
-	/*--Tmp--*/
-	int		vu_height;
-	int		vu_width;
-	char 	*vu_xpm[24]; //j'ai eu la flemme de mettre trop de frams et oui le sang ici c'est la rue
+	char 	*vu_xpm[24];
 	void 	*vu[24];
 }	t_player;
 
 typedef struct s_keys
 {
-	short a;
-	short s;
-	short d;
-	short w;
-	short l;
-	short r;
+	bool a;
+	bool s;
+	bool d;
+	bool w;
+	bool l;
+	bool r;
 }	t_keys;
 
 typedef struct s_data
 {
 	void    	*mlx_ptr;
+	int			iloop; //pour avoir le retour de mlx_loop
 	void    	*win;
+	void		*screen_img;
+	int			size; //pour la tailler des sprites
+	void		*bg_ptr;
+	void		*wall_ptr;
+	int			win_width; 
+	int			win_height;
 	char		**map;
 	t_keys		*keys_s;
 	t_player	*player;
 }	t_data;
-
-/*Notes pour Nathans :
-*	J'ai pas pense a d'autres structures donc a toi de voir si
-*	si tu trouves quelque chose de pertinant mais je pense
-*	qu'on va deja faire une base du jeu en 2d giga epure pour
-*	pas se perdre. Mais ajoutes tout ce qui semble bien.
-*/
 
 /*/////////////////////////////////////////////////////////////////////////////
 		FUNCTIONS PROTOTYPES
@@ -86,5 +83,6 @@ void	c3d_keys_status_init(t_data *data);
 
 /*----utilis----*/
 float deg_to_rad(float i_degrees);
+void c3d_put_img_to_img(void *img_dst, void *img_src, int x, int y);
 
 #endif

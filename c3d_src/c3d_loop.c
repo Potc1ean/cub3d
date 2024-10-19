@@ -1,65 +1,77 @@
 #include "../c3d_inc/cub3d.h"
 
-static int	c3d_display_map(t_data data)
+static bool ph_approver(t_data *data)
 {
-	int	x = 0;
-	int	y = 0;
-	int size = 32;
-	void *iptr = mlx_xpm_file_to_image(data.mlx_ptr, "c3d_xpm/wall_2d/c2d_wall.xpm", &size, &size);
-
-	while (data.map[y])
+    float x = data->player->x;
+    float y = data->player->y;
+    if (data->keys_s->a)
 	{
-		x = 0;
-		while (data.map[y][x])
-		{
-			if (data.map[y][x] == '#')
-			{
-				mlx_put_image_to_window(data.mlx_ptr, data.win, iptr, x* 32, y* 32);
-			}
-			x++;
-		}
-		y++;
+		x += cosf(deg_to_rad(data->player->dir + 90)) * PLAYER_MOV_SPEED;
+		y -= sinf(deg_to_rad(data->player->dir + 90)) * PLAYER_MOV_SPEED;
 	}
-	return (0);
+	if (data->keys_s->s)
+	{
+		x -= cosf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
+		y += sinf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
+	}
+	if (data->keys_s->d)
+	{
+		x += cosf(deg_to_rad(data->player->dir - 90)) * PLAYER_MOV_SPEED;
+		y -= sinf(deg_to_rad(data->player->dir - 90)) * PLAYER_MOV_SPEED;
+	}
+	if (data->keys_s->w)
+	{
+		x += cosf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
+		y -= sinf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
+	}
+    if (x > data->player->x)
+        x += 1;
+    if (y > data->player->y)
+        y += 1;
+    if (data->map[(int)y][(int)x] == '1')
+        return (false);
+    return (true);
 }
 
 static void c3d_player_move(t_data *data)
 {
-	void *bg_ptr = mlx_xpm_file_to_image(data->mlx_ptr, "c3d_xpm/background.xpm",&data->player->vu_height, &data->player->vu_width); 
-	mlx_put_image_to_window(data->mlx_ptr, data->win, bg_ptr, data->player->x, data->player->y);
-	if (data->keys_s->a)
-	{
-		data->player->x += cosf(deg_to_rad(data->player->dir + 90)) * PLAYER_MOV_SPEED;
-		data->player->y -= sinf(deg_to_rad(data->player->dir + 90)) * PLAYER_MOV_SPEED;
-	}
-	if (data->keys_s->s)
-	{
-		data->player->x -= cosf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
-		data->player->y += sinf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
-	}
-	if (data->keys_s->d)
-	{
-		data->player->x += cosf(deg_to_rad(data->player->dir - 90)) * PLAYER_MOV_SPEED;
-		data->player->y -= sinf(deg_to_rad(data->player->dir - 90)) * PLAYER_MOV_SPEED;
-	}
-	if (data->keys_s->w)
-	{
-		data->player->x += cosf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
-		data->player->y -= sinf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
-	}
-	if (data->keys_s->l)
+    if (data->keys_s->l)
 		data->player->dir += PLAYER_ROT_SPEED;
 	if (data->keys_s->r)
 		data->player->dir -= PLAYER_ROT_SPEED;
-	if (data->player->dir < 0)
-		data->player->dir += 360;
-	data->player->dir %= 360;
+    if (ph_approver(data)) 
+    {
+        void *bg_ptr = mlx_xpm_file_to_image(data->mlx_ptr, "c3d_xpm/background.xpm",&(data->size), &(data->size)); 
+        c3d_put_img_to_img(data->screen_img, bg_ptr, (int)(data->player->x*32), (int)(data->player->y*32));
+        if (data->keys_s->a)
+        {
+            data->player->x += cosf(deg_to_rad(data->player->dir + 90)) * PLAYER_MOV_SPEED;
+            data->player->y -= sinf(deg_to_rad(data->player->dir + 90)) * PLAYER_MOV_SPEED;
+        }
+        if (data->keys_s->s)
+        {
+            data->player->x -= cosf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
+            data->player->y += sinf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
+        }
+        if (data->keys_s->d)
+        {
+            data->player->x += cosf(deg_to_rad(data->player->dir - 90)) * PLAYER_MOV_SPEED;
+            data->player->y -= sinf(deg_to_rad(data->player->dir - 90)) * PLAYER_MOV_SPEED;
+        }
+        if (data->keys_s->w)
+        {
+            data->player->x += cosf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
+            data->player->y -= sinf(deg_to_rad(data->player->dir)) * PLAYER_MOV_SPEED;
+        }
+        mlx_destroy_image(data->mlx_ptr, bg_ptr);
+    }
 }
 
 int c3d_loop(t_data *data)
 {
-	usleep(1000);
-	c3d_player_move(data);
+    c3d_player_move(data);
 	c3d_display_player(data);
+    mlx_clear_window(data->mlx_ptr, data->win);
+    mlx_put_image_to_window(data->mlx_ptr, data->win, data->screen_img, 0, 0);
 	return (0);
 }
