@@ -35,6 +35,8 @@ int c3d_data_init(t_data **data)
     (*data)->size = 32;
     (*data)->win = mlx_new_window((*data)->mlx_ptr, (*data)->win_width, (*data)->win_height, "Cub3d");
     (*data)->screen_img = mlx_new_image((*data)->mlx_ptr, (*data)->win_width, (*data)->win_height);
+    (*data)->wall_iptr = mlx_xpm_file_to_image((*data)->mlx_ptr, "c3d_xpm/wall_2d/c2d_wall.xpm", &(*data)->size, &(*data)->size);
+    (*data)->bg_iptr = mlx_xpm_file_to_image((*data)->mlx_ptr, "c3d_xpm/background.xpm", &(*data)->size, &(*data)->size);
     (*data)->map = malloc(sizeof(char*)* 19);
     (*data)->map[0] = "1111111111111111111111111\0";
     (*data)->map[1] = "1000000000000000000000001\0";

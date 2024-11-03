@@ -8,6 +8,8 @@ static int c3d_close_window(t_data *data)
 	mlx_clear_window(data->mlx_ptr, data->win);
 	mlx_destroy_window(data->mlx_ptr, data->win);
 	mlx_destroy_image(data->mlx_ptr, data->screen_img);
+	mlx_destroy_image(data->mlx_ptr, data->wall_iptr);
+	mlx_destroy_image(data->mlx_ptr, data->bg_iptr);
 	while (a < 24)
 	{
 		mlx_destroy_image(data->mlx_ptr, data->player->vu[a]);
@@ -64,29 +66,6 @@ static int hub_keyrelease(int key, t_data *data)
 	return (0);
 }
 
-static int	c3d_display_map(t_data *data)
-{
-	int	x = 0;
-	int	y = 0;
-	void *iptr = mlx_xpm_file_to_image(data->mlx_ptr, "c3d_xpm/wall_2d/c2d_wall.xpm", &data->size, &data->size);
-
-	while (data->map[y])
-	{
-		x = 0;
-		while (data->map[y][x])
-		{
-			if (data->map[y][x] == '1')
-			{
-				c3d_put_img_to_img(data->screen_img, iptr, x* data->size, y* data->size);
-			}
-			x++;
-		}
-		y++;
-	}
-	mlx_destroy_image(data->mlx_ptr, iptr);
-	return (0);
-}
-
 static int	hub_keypress(int key, t_data *data)
 {
 	move(key, data);
@@ -105,8 +84,6 @@ static int	hub_keypress(int key, t_data *data)
 
 void c3d_keys_manager(t_data *data)
 {
-	c3d_display_map(data);
-    c3d_display_player(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win, data->screen_img, 0, 0);
 	mlx_hook(data->win, 2, 1L<<0, hub_keypress, data);
 	mlx_hook(data->win, 3, 1L<<1, hub_keyrelease, data);

@@ -25,8 +25,8 @@
 		MACROS
 *//////////////////////////////////////////////////////////////////////////////
 
-#define PLAYER_ROT_SPEED 0.1f;
-#define PLAYER_MOV_SPEED 0.01f;
+#define PLAYER_ROT_SPEED 0.3f;
+#define PLAYER_MOV_SPEED 0.04f;
 
 /*/////////////////////////////////////////////////////////////////////////////
 		STRUCTURES TYPEDEFS
@@ -59,8 +59,8 @@ typedef struct s_data
 	void    	*win;
 	void		*screen_img;
 	int			size; //pour la tailler des sprites
-	void		*bg_ptr;
-	void		*wall_ptr;
+	void		*bg_iptr;
+	void		*wall_iptr;
 	int			win_width; 
 	int			win_height;
 	char		**map;
@@ -82,7 +82,12 @@ int		c3d_data_init(t_data **data);
 void	c3d_keys_status_init(t_data *data);
 
 /*----utilis----*/
-float deg_to_rad(float i_degrees);
-void c3d_put_img_to_img(void *img_dst, void *img_src, int x, int y);
+float 	deg_to_rad(float i_degrees);
+void 	c3d_put_img_to_img(void *img_dst, void *img_src, int x, int y);
+int		c3d_get_player_dir(float dir);
+
+/*----ray----*/
+
+void    c3d_raycaster(t_data *data);
 
 #endif

@@ -31,3 +31,8 @@ void c3d_put_img_to_img(void *img_dst, void *img_src, int x, int y)
         j++;
     }
 }
+
+int c3d_get_player_dir(float dir)
+{
+    return((int)(dir) % 360);
+}
