@@ -17,6 +17,7 @@ static int c3d_close_window(t_data *data)
 	}
 	free(data->map);
 	free(data->keys_s);
+	free(data->player->pos);
 	free(data->player);
 	data->mlx_ptr = NULL;
 	data->win = NULL;
@@ -68,6 +69,7 @@ static int hub_keyrelease(int key, t_data *data)
 
 static int	hub_keypress(int key, t_data *data)
 {
+	// c3d_raycaster(data);
 	move(key, data);
     if (key == K_LEFT)
 	{

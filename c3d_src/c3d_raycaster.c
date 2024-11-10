@@ -1,39 +1,52 @@
 #include "../c3d_inc/cub3d.h"  
 
-static void set_incr(float *incX, float *incY, float dir)
+static t_point apply_incr(t_data *data, t_point *oldP, float dir)
 {
-    *incX = cosf(deg_to_rad(dir));
-    *incY = -sinf(deg_to_rad(dir));
-    if (fabsf(*incX) > fabsf(*incY))
-        *incX = 1 * copysign(1.0, *incX);
-    else if (fabsf(*incX) == fabsf(*incY))
+    t_point Px;
+    t_point Py;
+    
+    if ((dir == 90) || (dir == 270))
     {
-        *incX = 1 * copysign(1.0, *incX);
-        *incY = 1 * copysign(1.0, *incY);
+        Py.x = 0;
+        Py.y = (int)oldP->y - sinf(deg_to_rad(dir));
     }
     else
-        *incY = 1 * copysign(1.0, *incY);
+    {
+        if ((0 < cosf(deg_to_rad(dir))) || (oldP->x == (int)oldP->x))
+        Px.x = (int)(oldP->x + copysign(1.0, cosf(deg_to_rad(dir))));
+        else
+            Px.x = (int)oldP->x;
+        Px.y = oldP->y - ((Px.x - oldP->x) * tanf(deg_to_rad(dir)));
+        if ((0 < -sinf(deg_to_rad(dir))) || (oldP->y == (int)oldP->y))
+            Py.y = (int)(oldP->y + copysign(1.0, -sinf(deg_to_rad(dir))));
+        else
+            Py.y = (int)oldP->y;
+        Py.x = oldP->x + ((Py.y - oldP->y) * -tanf(deg_to_rad(90 + dir -(2*fmodf(dir, 90.f)))));
+        if (c3d_distance(oldP, &Px) < c3d_distance(oldP, &Py))
+            return Px;
+    }
+    return (Py);
 }
 
-static void hitpoint(float *x, float *y, t_data *data, float incX, float incY)
+static int touched_wall(char **map, t_point P, float dir)
 {
-    float posX = *x;
-    float posY = *y;
-    /* bonne maniere de faire mais pas jolie :
-    *   posX += incX + (posX - (float)(int)posX);
-    *   posY += incY + (posY - (float)(int)posY);
-    */
-    posX = (int)posX;
-    posY = (int)posY;
-    while (1)
+    if (!(P.x == (int)P.x))
     {
-        if (data->map[(int)(posY+(incY/2))][(int)(posX+(incX/2))] == '1')
-            break;
-        posX += incX;
-        posY += incY;
+        if ((map[(int)P.y][(int)P.x] == '1') || (map[(int)P.y - 1][(int)P.x] == '1'))
+            return(1);
     }
-    *x = posX;
-    *y = posY;
+    else if (!(P.y == (int)P.y))
+    {
+        if ((map[(int)P.y][(int)P.x] == '1') || (map[(int)P.y][(int)P.x - 1] == '1'))
+            return(1);
+    }
+    else if ((P.y == (int)P.y) && (P.x == (int)P.x))
+    {
+        if ((map[(int)P.y][(int)P.x] == '1') || (map[(int)P.y - 1][(int)P.x] == '1') 
+            || (map[(int)P.y - 1][(int)P.x - 1] == '1') || (map[(int)P.y][(int)P.x - 1] == '1'))
+            return(1);
+    }
+    return (0);
 }
 
 static void draw_hitpoint(t_data *data, float x, float y)
@@ -43,28 +56,32 @@ static void draw_hitpoint(t_data *data, float x, float y)
     w = 9;
     x *= data->size;
     y *= data->size;
-    void *hitpoint_ptr = mlx_xpm_file_to_image(data->mlx_ptr, "c3d_xpm/hitpoint.xpm", &w, &w);
+    void *hitpoint_ptr = mlx_xpm_file_to_image(data->mlx_ptr,
+         "c3d_xpm/hitpoint.xpm", &w, &w);
     c3d_put_img_to_img(data->screen_img, hitpoint_ptr, x, y);
     mlx_destroy_image(data->mlx_ptr, hitpoint_ptr);
 }
 
-void    c3d_raycaster(t_data *data)
+/*c3d_raycaster :
+*   this function take data of the program,
+*   and direction of the ray you want to made.
+*   the return is a structur with coordinates of the first 
+*   collision of this ray with wall.
+*/
+t_point    c3d_raycaster(t_data *data, float dir)
 {
-    float incX;
-    float incY;
-    float x = data->player->x;
-    float y = data->player->y;
+    t_point tmpP;
+    t_point hit_point;
 
-    set_incr(&incX, &incY, data->player->dir);
-    hitpoint(&x, &y, data, incX, incY);
-    draw_hitpoint(data, x, y);
-
-    printf("hitpoint x : %f\n", x);
-    printf("hitpoint y : %f\n", y);
-    printf("-------------------\n");
-    printf("direction = %d\n", c3d_get_player_dir(data->player->dir));
-    printf("player x : %f\n", data->player->x);
-    printf("player y : %f\n", data->player->y);
-    printf("/////////////////////////////\n");
-    printf("/////////////////////////////\n");
+    hit_point.x = data->player->pos->x;
+    hit_point.y = data->player->pos->y;
+    while (!touched_wall(data->map, hit_point, dir))
+    {
+        draw_hitpoint(data, hit_point.x, hit_point.y);
+        tmpP = apply_incr(data, &hit_point, dir);
+        hit_point.x = tmpP.x;
+        hit_point.y = tmpP.y;
+    }
+    draw_hitpoint(data, hit_point.x, hit_point.y);
+    return (hit_point);
 }

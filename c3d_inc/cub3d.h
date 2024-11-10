@@ -32,12 +32,16 @@
 		STRUCTURES TYPEDEFS
 *//////////////////////////////////////////////////////////////////////////////
 
-typedef struct player
+typedef struct s_point
 {
-	/*--Perm--*/
-	float dir;
 	float x;
 	float y;
+}	t_point;
+
+typedef struct s_player
+{
+	float	dir;
+	t_point	*pos;
 	char 	*vu_xpm[24];
 	void 	*vu[24];
 }	t_player;
@@ -82,12 +86,13 @@ int		c3d_data_init(t_data **data);
 void	c3d_keys_status_init(t_data *data);
 
 /*----utilis----*/
+float	c3d_distance(t_point *Px, t_point *Py);
 float 	deg_to_rad(float i_degrees);
 void 	c3d_put_img_to_img(void *img_dst, void *img_src, int x, int y);
 int		c3d_get_player_dir(float dir);
 
 /*----ray----*/
 
-void    c3d_raycaster(t_data *data);
+t_point c3d_raycaster(t_data *data, float dir);
 
 #endif

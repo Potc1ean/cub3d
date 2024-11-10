@@ -4,7 +4,9 @@ static void player_init(t_data *data)
 {
     int x = 0;
     int y = 0;
+    data->player->dir = 83;
 
+    data->player->pos = malloc(sizeof(t_data));
     while (data->map[y])
     {
         while (data->map[y][x])
@@ -12,8 +14,8 @@ static void player_init(t_data *data)
             if (data->map[y][x] == 'P')
             {
                 // data->map[y][x] = '0';
-                data->player->x = x;
-                data->player->y = y;
+                data->player->pos->x = x;
+                data->player->pos->y = y;
                 return;
             }
             x++;
@@ -21,7 +23,6 @@ static void player_init(t_data *data)
         x = 0;
         y++;
     }
-    data->player->dir = 0;
 }
 
 int c3d_data_init(t_data **data)

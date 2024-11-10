@@ -6,8 +6,8 @@ void c3d_display_player(t_data *data)
     int x;
     int y;
 
-    x = (int)(data->player->x * 32);
-    y = (int)(data->player->y * 32);
+    x = (int)(data->player->pos->x * 32); 
+    y = (int)(data->player->pos->y * 32);
     if (data->player->dir < 0)
 		data->player->dir += 360;
     i = ((int)data->player->dir % 360) / 15;

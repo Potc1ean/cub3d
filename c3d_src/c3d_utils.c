@@ -36,3 +36,13 @@ int c3d_get_player_dir(float dir)
 {
     return((int)(dir) % 360);
 }
+
+float c3d_distance(t_point *Px, t_point *Py)
+{
+    float dx;
+    float dy;
+
+    dx = Px->x - Py->x;
+    dy = Px->y - Py->y;
+    return (sqrtf(dx * dx + dy * dy));
+}
